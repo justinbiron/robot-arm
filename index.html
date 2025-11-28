@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arm Control Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .slider-container {
+            margin: 25px auto;
+            width: 800px;
+            max-width: 90%;
+            background: #222;
+            padding: 20px;
+            border-radius: 12px;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 30px;
+        }
+
+        h2 {
+            margin-bottom: 5px;
+        }
+
+        /* Mobile optimization */
+        @media (max-width: 600px) {
+            .slider-container {
+                width: 100%;
+                padding: 18px;
+            }
+            input[type=range] {
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Servo Motors Controller</h1>
+    <p>Move the sliders to control the servos in real time.</p>
+
+    <!-- Servo 0 -->
+    <div class="slider-container">
+        <h2>Servo 1</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(0, this.value)">
+    </div>
+
+    <!-- Servo 1 -->
+    <div class="slider-container">
+        <h2>Servo 2</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(1, this.value)">
+    </div>
+
+    <!-- Servo 2 -->
+    <div class="slider-container">
+        <h2>Servo 3</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(2, this.value)">
+    </div>
+
+    <!-- Servo 3 -->
+    <div class="slider-container">
+        <h2>Servo 4</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(3, this.value)">
+    </div>
+
+    <!-- Servo 4 -->
+    <div class="slider-container">
+        <h2>Servo 5</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(4, this.value)">
+    </div>
+
+    <!-- Servo 5 -->
+    <div class="slider-container">
+        <h2>Servo 6</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(5, this.value)">
+    </div>
+
+    <!-- Servo 6 -->
+    <div class="slider-container">
+        <h2>Servo 7</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(6, this.value)">
+    </div>
+
+    <!-- Servo 7 -->
+    <div class="slider-container">
+        <h2>Servo 8</h2>
+        <input type="range" min="0" max="180" value="90" 
+               oninput="updateServo(7, this.value)">
+    </div>
+
+    <script>
+        const TOKEN = "07zump6GACyF0v1WmtULAvfvTUuDhG8w";
+
+        function updateServo(servo, value) {
+            const url = `https://blynk.cloud/external/api/update?token=${TOKEN}&V${servo}=${value}`;
+            fetch(url)
+                .then(() => console.log(`Sent: Servo ${servo} → ${value}`))
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+
+</body>
+</html>
