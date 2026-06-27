@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Arm Control Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #111;
+            color: white;
+            text-align: center;
+        }
+
+        .slider-container {
+            margin: 20px auto;
+            width: 800px;
+            max-width: 90%;
+            background: #222;
+            padding: 12px 20px;
+            border-radius: 12px;
+        }
+
+        input[type=range] {
+            width: 100%;
+            height: 30px;
+        }
+
+        .button-row {
+            margin: 20px auto;
+            width: 800px;
+            max-width: 90%;
+            display: flex;
+            justify-content: space-between; /* allows one button left, one right */
+        }
+
+        button {
+            padding: 14px 28px;
+            font-size: 18px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+        }
+
+        h2 {
+            margin-bottom: 4px;
+        }
+
+        @media (max-width: 600px) {
+            .slider-container {
+                width: 100%;
+                padding: 18px;
+            }
+
+            .button-row {
+                width: 100%;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            input[type=range] {
+                height: 35px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Mechanical Arm Controller</h1>
+
+    <!-- Servo sliders -->
+    <div class="slider-container">
+        <h2>[CCW] Base [CW]</h2>
+        <input type="range" min="0" max="180" value="90"
+            oninput="updateServo(0, this.value)">
+    </div>
+
+    <div class="slider-container">
+        <h2>[Down] Shoulder [Up]</h2>
+        <input type="range" min="0" max="180" value="90"
+            oninput="updateServo(3, this.value)">
+    </div>
+
+    <div class="slider-container">
+        <h2>[Down] Elbow [Up]</h2>
+        <input type="range" min="0" max="180" value="90"
+            oninput="updateServo(4, 180 - this.value)">
+    </div>
+
+    <div class="slider-container">
+        <h2>Wrist Left-Right</h2>
+        <input type="range" min="0" max="180" value="90"
+            oninput="updateServo(5, this.value)">
+    </div>
+
+    <div class="slider-container">
+        <h2>Wrist Rotation</h2>
+        <input type="range" min="0" max="180" value="90"
+            oninput="updateServo(6, this.value)">
+    </div>
+
+    <div class="slider-container">
+        <h2>[Grab] Hand [Let Go]</h2>
+        <input type="range" min="0" max="180" value="90"
+            oninput="updateDual(180 - this.value)">
+    </div>
+
+    <!-- Button row -->
+    <div class="button-row">
+        <button onclick="pretendToBeHuman()">Pretend to Be Human</button>
+        <button onclick="stackCubes()">Stack Cubes</button>
+    </div>
+
+<script>
+    const TOKEN = "07zump6GACyF0v1WmtULAvfvTUuDhG8w";
+
+    function updateServo(servo, value) {
+        fetch(`https://blynk.cloud/external/api/update?token=${TOKEN}&V${servo}=${value}`)
+            .catch(() => {});
+    }
+
+    function updateDual(value) {
+        let v1 = Number(value);
+        let v2 = 180 - v1;
+
+        fetch(`https://blynk.cloud/external/api/update?token=${TOKEN}&V1=${v1}`)
+            .catch(() => {});
+        fetch(`https://blynk.cloud/external/api/update?token=${TOKEN}&V2=${v2}`)
+            .catch(() => {});
+    }
+
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    // STACK CUBES sequence (kept from your previous code)
+    async function stackCubes() {
+        const BASE_1 = 90;        
+        const SHOULDER_1 = 100;   
+        const ELBOW_1 = 180;     
+        const WRIST_LR_1 = 90;    
+        const WRIST_ROT_1 = 90;   
+        const HAND_1 = 80;      
+
+        updateServo(0, BASE_1);
+        updateServo(3, SHOULDER_1);
+        updateServo(4, 180 - ELBOW_1);
+        updateServo(5, WRIST_LR_1);
+        updateServo(6, WRIST_ROT_1);
+        updateDual(HAND_1);
+
+        await delay(1200);
+
+        const BASE_2 = 105;
+        const SHOULDER_2 = 45;
+        const ELBOW_2 = 124;
+        const HAND_2 = 40;
+
+        const STEP_DELAY = 600;
+
+        updateDual(HAND_2);
+        await delay(STEP_DELAY);
+
+        updateServo(0, BASE_2);
+        await delay(STEP_DELAY);
+
+        updateServo(3, SHOULDER_2);
+        await delay(STEP_DELAY);
+
+        updateServo(4, 180 - ELBOW_2);
+        await delay(STEP_DELAY);
+
+        // Additional sequences continue here as before...
+    }
+
+    // PRETEND TO BE HUMAN sequence
+    async function pretendToBeHuman() {
+        // First: move all joints at once
+        const BASE_ALL = 105;
+        const SHOULDER_ALL = 130;
+        const ELBOW_ALL = 56;
+        const WRIST_LR_ALL = 0;
+        const WRIST_ROT_ALL = 150;
+        const HAND_ALL = 178;
+
+        await delay (400);
+        updateServo(0, BASE_ALL);
+        updateServo(3, SHOULDER_ALL);
+        updateServo(4, 180 - ELBOW_ALL);
+        updateServo(5, WRIST_LR_ALL);
+        updateServo(6, WRIST_ROT_ALL);
+        updateDual(HAND_ALL);
+
+        await delay(600); 
+
+
+        updateServo(3, 82); 
+
+        await delay(1800);
+
+        updateServo(5, 150);
+
+        await delay(600);
+
+        updateServo(5, 20);
+    }
+</script>
+
+</body>
+</html>
