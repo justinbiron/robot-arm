@@ -31,7 +31,7 @@
             width: 800px;
             max-width: 90%;
             display: flex;
-            justify-content: space-between; /* allows one button left, one right */
+            justify-content: space-between; 
         }
 
         button {
@@ -68,7 +68,7 @@
 
     <h1>Mechanical Arm Controller</h1>
 
-    <!-- Servo sliders -->
+    
     <div class="slider-container">
         <h2>[CCW] Base [CW]</h2>
         <input type="range" min="0" max="180" value="90"
@@ -100,15 +100,15 @@
     </div>
 
     <div class="slider-container">
-        <h2>[Grab] Hand [Let Go]</h2>
+        <h2>[Grab] Hand [Let go]</h2>
         <input type="range" min="0" max="180" value="90"
             oninput="updateDual(180 - this.value)">
     </div>
 
-    <!-- Button row -->
+
     <div class="button-row">
-        <button onclick="pretendToBeHuman()">Pretend to Be Human</button>
-        <button onclick="stackCubes()">Stack Cubes</button>
+        <button onclick="pretendToBeHuman()">Trick captcha</button>
+        <button onclick="stackCubes()">Stack cubes</button>
     </div>
 
 <script>
@@ -133,7 +133,6 @@
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    // STACK CUBES sequence (kept from your previous code)
     async function stackCubes() {
         const BASE_1 = 90;        
         const SHOULDER_1 = 100;   
@@ -169,13 +168,9 @@
 
         updateServo(4, 180 - ELBOW_2);
         await delay(STEP_DELAY);
-
-        // Additional sequences continue here as before...
     }
 
-    // PRETEND TO BE HUMAN sequence
-    async function pretendToBeHuman() {
-        // First: move all joints at once
+    async function trickCaptcha() {
         const BASE_ALL = 105;
         const SHOULDER_ALL = 130;
         const ELBOW_ALL = 56;
